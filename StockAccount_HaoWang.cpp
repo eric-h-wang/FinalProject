@@ -27,8 +27,8 @@ void StockAccount::run()
 		cout << "5. View a graph for the portfolio value" << endl;
 		cout << "6. View transaction history" << endl;
 		cout << "7. Return to previous menu\n" << endl;
+		cout << "Option: ";
 		cin >> ch;
-		cout << "Option: " << ch << endl;
 		switch (ch) {
 		case 1: break;
 		case 2: break;

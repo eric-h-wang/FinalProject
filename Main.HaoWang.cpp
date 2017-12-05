@@ -18,8 +18,8 @@ int main()
 		cout << "1. Stock Portfolio Account" << endl;
 		cout << "2. Bank Account" << endl;
 		cout << "3. Exit\n" << endl;
+		cout << "Option: ";
 		cin >> ch;
-		cout << "Option: " << ch << endl;
 		switch (ch) {
 		case 1: cout << "Stock Account\n" << endl; sa.run(); break;
 		case 2: cout << "Bank Account\n" << endl; ba.run(); break;

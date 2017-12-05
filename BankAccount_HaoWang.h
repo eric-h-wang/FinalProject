@@ -4,8 +4,11 @@ class BankAccount :
 	public Account
 {
 public:
-	BankAccount();
+	BankAccount(double bal = 0);
 	~BankAccount();
 	void run();
+	void deposit();
+	void withdraw();
+	void print_balance() const;
 };
 
