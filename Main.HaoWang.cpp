@@ -2,6 +2,7 @@
 #include "BankAccount_HaoWang.h"
 #include "StockAccount_HaoWang.h"
 
+
 using std::endl;
 using std::cout;
 using std::cin;

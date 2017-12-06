@@ -1,12 +1,31 @@
 #include "BankAccount_HaoWang.h"
 #include <iostream>
+#include <fstream>
 #include <iomanip>
+#include <time.h>
+#include <string>
+#include <sstream>
 
 using std::endl;
 using std::cout;
 using std::cin;
 using std::setprecision;
 using std::fixed;
+using std::setw;
+using std::string;
+
+string get_time()
+{
+	__time32_t aclock;
+	struct tm newtime;
+	char buffer[32];
+	errno_t err_num;
+	_time32(&aclock);
+	_localtime32_s(&newtime, &aclock);
+	err_num = asctime_s(buffer, 32, &newtime);
+	buffer[strlen(buffer) - 1] = '\0';
+	return buffer;
+}
 
 BankAccount::BankAccount(double bal) : Account(bal)
 {
@@ -22,6 +41,17 @@ void BankAccount::print_balance() const
 	cout << "You have $" << setprecision(2) << fixed << get_balance() << " in your bank account.\n";
 }
 
+void BankAccount::write_to_file(const char* oper, double amt) const
+{
+	std::ofstream myfile;
+	myfile.open(hist_file, std::ios::app);
+	if (myfile.is_open())
+	{
+		myfile << get_time() << ","<< oper << "," << amt << "," << get_balance() << endl;
+		myfile.close();
+	}
+}
+
 void BankAccount::deposit()
 {
 	double amount;
@@ -33,6 +63,7 @@ void BankAccount::deposit()
 		cin >> amount;
 	}
 	set_balance(get_balance() + amount);
+	write_to_file("d", amount);
 }
 
 void BankAccount::withdraw()
@@ -51,8 +82,35 @@ void BankAccount::withdraw()
 		}
 		else {
 			set_balance(get_balance() - amount);
+			write_to_file("w", amount);
 			break;
 		}
+	}
+}
+
+void BankAccount::print_history() const
+{
+	string line;
+	string time;
+	char oper;
+	double amt;
+	double bal;
+	char separator;
+	std::ifstream myfile;
+	myfile.open(hist_file);
+	cout << setw(26) << "Date & Time" << setw(10) << "Operation" << setw(10) << "Amount" << setw(10) << "Balance" << endl;
+	if (myfile.is_open())
+	{
+		while (getline(myfile, line))
+		{
+			std::istringstream iss(line);
+			getline(iss, time, ',');
+			iss >> oper >> separator >> amt >> separator >> bal;
+			cout << setw(26) << time << setw(10) << (oper == 'w' ? "Withdraw" : "Deposit") << setw(10) << amt
+				<< setw(10) << bal << endl;
+		}
+		myfile.close();
+		cout << endl;
 	}
 }
 
@@ -73,7 +131,7 @@ void BankAccount::run()
 		case 1: print_balance(); break;
 		case 2: deposit(); break;
 		case 3: withdraw(); break;
-		case 4: break;
+		case 4: print_history(); break;
 		case 5: return;
 		default: cout << "Invalid choice, try again!\n" << endl; break;
 		}
