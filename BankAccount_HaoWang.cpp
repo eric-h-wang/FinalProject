@@ -25,23 +25,14 @@ __time32_t get_time()
 BankAccount::BankAccount()
 {
 	std::ifstream myfile;
-	myfile.open(hist_file);
+	myfile.open(status_file);
 	string line;
-	string new_line;
-	getline(myfile, new_line);
-	if (new_line.empty()) set_balance(0);
-	else
-	{
-		while (!new_line.empty())
-		{
-			line = new_line;
-			getline(myfile, new_line);
-		}
+	getline(myfile, line);
+	if (line.empty()) set_balance(10000);
+	else {
 		std::istringstream iss(line);
-		char c;
-		unsigned long int i;
 		double bal;
-		iss >> i >> c >> c >> c >> bal >> c >> bal;
+		iss >> bal;
 		set_balance(bal);
 	}
 	myfile.close();

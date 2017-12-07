@@ -14,5 +14,6 @@ public:
 	void print_history() const;
 private:
 	const char* hist_file = "bank_transaction_history.txt";
+	const char* status_file = "status_file.txt";
 };
 
