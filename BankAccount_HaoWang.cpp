@@ -14,21 +14,37 @@ using std::fixed;
 using std::setw;
 using std::string;
 
-string get_time()
+
+__time32_t get_time()
 {
 	__time32_t aclock;
-	struct tm newtime;
-	char buffer[32];
-	errno_t err_num;
 	_time32(&aclock);
-	_localtime32_s(&newtime, &aclock);
-	err_num = asctime_s(buffer, 32, &newtime);
-	buffer[strlen(buffer) - 1] = '\0';
-	return buffer;
+	return aclock;
 }
 
-BankAccount::BankAccount(double bal) : Account(bal)
+BankAccount::BankAccount()
 {
+	std::ifstream myfile;
+	myfile.open(hist_file);
+	string line;
+	string new_line;
+	getline(myfile, new_line);
+	if (new_line.empty()) set_balance(0);
+	else
+	{
+		while (!new_line.empty())
+		{
+			line = new_line;
+			getline(myfile, new_line);
+		}
+		std::istringstream iss(line);
+		char c;
+		unsigned long int i;
+		double bal;
+		iss >> i >> c >> c >> c >> bal >> c >> bal;
+		set_balance(bal);
+	}
+	myfile.close();
 }
 
 
@@ -91,11 +107,11 @@ void BankAccount::withdraw()
 void BankAccount::print_history() const
 {
 	string line;
-	string time;
 	char oper;
 	double amt;
 	double bal;
 	char separator;
+	__time32_t aclock;
 	std::ifstream myfile;
 	myfile.open(hist_file);
 	cout << setw(26) << "Date & Time" << setw(10) << "Operation" << setw(10) << "Amount" << setw(10) << "Balance" << endl;
@@ -104,9 +120,14 @@ void BankAccount::print_history() const
 		while (getline(myfile, line))
 		{
 			std::istringstream iss(line);
-			getline(iss, time, ',');
-			iss >> oper >> separator >> amt >> separator >> bal;
-			cout << setw(26) << time << setw(10) << (oper == 'w' ? "Withdraw" : "Deposit") << setw(10) << amt
+			iss >> aclock >> separator >> oper >> separator >> amt >> separator >> bal;
+			struct tm newtime;
+			char buffer[32];
+			errno_t err_num;
+			_localtime32_s(&newtime, &aclock);
+			err_num = asctime_s(buffer, 32, &newtime);
+			buffer[strlen(buffer) - 1] = '\0';
+			cout << setw(26) << buffer << setw(10) << (oper == 'w' ? "Withdraw" : "Deposit") << setw(10) << amt
 				<< setw(10) << bal << endl;
 		}
 		myfile.close();

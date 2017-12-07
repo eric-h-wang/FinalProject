@@ -4,7 +4,7 @@ class BankAccount :
 	public Account
 {
 public:
-	BankAccount(double bal = 0);
+	BankAccount();
 	~BankAccount();
 	void run();
 	void deposit();
