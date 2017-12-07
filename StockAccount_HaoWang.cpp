@@ -1,9 +1,20 @@
 #include "StockAccount_HaoWang.h"
 #include <iostream>
+#include <string>
+#include <stdlib.h>
+#include <time.h>
+#include <sstream>
+#include <fstream>
+#include <algorithm>
+#include <iomanip>
 
 using std::cout;
 using std::cin;
 using std::endl;
+using std::string;
+using std::setprecision;
+using std::fixed;
+using std::setw;
 
 StockAccount::StockAccount()
 {
@@ -12,6 +23,38 @@ StockAccount::StockAccount()
 
 StockAccount::~StockAccount()
 {
+}
+
+void StockAccount::get_price()
+{
+	string symbol;
+	string fsymbol;
+	int i;
+	string filename;
+	string line;
+	double price;
+	std::ostringstream oss;
+	cout << "Please enter the stock symbol: ";
+	cin >> symbol;
+	srand(time(NULL));
+	i = rand() % 2 + 1;
+	oss << "Result_" << i << ".txt";
+	filename = oss.str();
+	std::ifstream myfile;
+	myfile.open(filename);
+	while (getline(myfile, line)) {
+		std::istringstream iss(line);
+		iss >> fsymbol >> price;
+		transform(symbol.begin(), symbol.end(), symbol.begin(), ::toupper);
+		if (fsymbol != symbol) {
+			continue;
+		}
+		else {
+			cout << setw(6) << fsymbol << " $" << setprecision(2) << fixed << price << endl;
+			return;
+		}
+	}
+	cout << "Can't find symbol " << symbol << endl;
 }
 
 void StockAccount::run()
@@ -30,7 +73,7 @@ void StockAccount::run()
 		cout << "Option: ";
 		cin >> ch;
 		switch (ch) {
-		case 1: break;
+		case 1: get_price(); break;
 		case 2: break;
 		case 3: break;
 		case 4: break;

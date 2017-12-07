@@ -7,5 +7,6 @@ public:
 	StockAccount();
 	~StockAccount();
 	void run();
+	void get_price();
 };
 
