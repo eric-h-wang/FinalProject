@@ -63,40 +63,16 @@ void BankAccount::write_to_file(const char* oper, double amt) const
 	}
 }
 
-void BankAccount::deposit()
+void BankAccount::deposit(double amt)
 {
-	double amount;
-	cout << "Please select the amount you wish to deposit: $";
-	cin >> amount;
-	while (amount < 0) {
-		cout << "The amount cannot be negative, try again\n";
-		cout << "Please select the amount you wish to deposit: $";
-		cin >> amount;
-	}
-	set_balance(get_balance() + amount);
-	write_to_file("d", amount);
+	set_balance(get_balance() + amt);
+	write_to_file("d", amt);
 }
 
-void BankAccount::withdraw()
+void BankAccount::withdraw(double amt)
 {
-	double amount;
-	while (true) {
-		cout << "Please select the amount you wish to withdraw: $";
-		cin >> amount;
-		if (amount < 0) {
-			cout << "The amount cannot be negative, try again\n";
-			continue;
-		}
-		else if (amount > get_balance()) {
-			cout << "Not enough money, try again\n";
-			continue;
-		}
-		else {
-			set_balance(get_balance() - amount);
-			write_to_file("w", amount);
-			break;
-		}
-	}
+	set_balance(get_balance() - amt);
+	write_to_file("w", amt);
 }
 
 void BankAccount::print_history() const
@@ -132,26 +108,12 @@ void BankAccount::print_history() const
 	}
 }
 
-void BankAccount::run()
+void BankAccount::instruction()
 {
-	int ch;
-	while (true)
-	{
-		cout << "Please select an option: " << endl;
-		cout << "1. View account balance" << endl;
-		cout << "2. Deposit money" << endl;
-		cout << "3. Withdraw money" << endl;
-		cout << "4. Print out history" << endl;
-		cout << "5. Return to previous menu\n" << endl;
-		cout << "Option: ";
-		cin >> ch;
-		switch (ch) {
-		case 1: print_balance(); break;
-		case 2: deposit(); break;
-		case 3: withdraw(); break;
-		case 4: print_history(); break;
-		case 5: return;
-		default: cout << "Invalid choice, try again!\n" << endl; break;
-		}
-	}
+	cout << "Please select an option: " << endl;
+	cout << "1. View account balance" << endl;
+	cout << "2. Deposit money" << endl;
+	cout << "3. Withdraw money" << endl;
+	cout << "4. Print out history" << endl;
+	cout << "5. Return to previous menu\n" << endl;
 }

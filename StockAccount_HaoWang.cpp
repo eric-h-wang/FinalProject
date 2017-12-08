@@ -25,17 +25,13 @@ StockAccount::~StockAccount()
 {
 }
 
-void StockAccount::get_price()
+bool StockAccount::get_price(string symbol, double& price)
 {
-	string symbol;
 	string fsymbol;
 	int i;
 	string filename;
 	string line;
-	double price;
 	std::ostringstream oss;
-	cout << "Please enter the stock symbol: ";
-	cin >> symbol;
 	srand(time(NULL));
 	i = rand() % 2 + 1;
 	oss << "Result_" << i << ".txt";
@@ -45,16 +41,10 @@ void StockAccount::get_price()
 	while (getline(myfile, line)) {
 		std::istringstream iss(line);
 		iss >> fsymbol >> price;
-		transform(symbol.begin(), symbol.end(), symbol.begin(), ::toupper);
-		if (fsymbol != symbol) {
-			continue;
-		}
-		else {
-			cout << setw(6) << fsymbol << " $" << setprecision(2) << fixed << price << endl;
-			return;
-		}
+		if (fsymbol != symbol) continue;
+		else return true;
 	}
-	cout << "Can't find symbol " << symbol << endl;
+	return false;
 }
 
 void StockAccount::print_history() const
@@ -102,40 +92,29 @@ void StockAccount::plot_portfolio_value() const
 
 }
 
-void StockAccount::buy()
+void StockAccount::buy(std::string symbol, int shares)
+{
+	
+}
+
+void StockAccount::sell(std::string symbol, int shares)
 {
 
 }
 
-void StockAccount::sell()
+int StockAccount::get_shares(std::string symbol)
 {
-
+	return 0;
 }
 
-void StockAccount::run()
+void StockAccount::instruction()
 {
-	int ch;
-	while (true)
-	{
-		cout << "Please select an option: " << endl;
-		cout << "1. Display the price for a stock symbol" << endl;
-		cout << "2. Display the current portfolio" << endl;
-		cout << "3. Buy shares" << endl;
-		cout << "4. Sell shares" << endl;
-		cout << "5. View a graph for the portfolio value" << endl;
-		cout << "6. View transaction history" << endl;
-		cout << "7. Return to previous menu\n" << endl;
-		cout << "Option: ";
-		cin >> ch;
-		switch (ch) {
-		case 1: get_price(); break;
-		case 2: print_portfolio(); break;
-		case 3: buy(); break;
-		case 4: sell(); break;
-		case 5: plot_portfolio_value(); break;
-		case 6: print_history(); break;
-		case 7: return;
-		default: cout << "Invalid choice, try again!\n" << endl; break;
-		}
-	}
+	cout << "Please select an option: " << endl;
+	cout << "1. Display the price for a stock symbol" << endl;
+	cout << "2. Display the current portfolio" << endl;
+	cout << "3. Buy shares" << endl;
+	cout << "4. Sell shares" << endl;
+	cout << "5. View a graph for the portfolio value" << endl;
+	cout << "6. View transaction history" << endl;
+	cout << "7. Return to previous menu\n" << endl;
 }
