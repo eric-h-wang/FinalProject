@@ -19,8 +19,9 @@ class MyDLinkList
 public:
 	MyDLinkList();
 	~MyDLinkList();
-	//void insert_node(string, int);
-	//void delete_node(DLinkNode* dln);
+	void insert_node(string, int);
+	void delete_node(DLinkNode* dln);
+	void sort(string);
 private:
 	DLinkNode *head;
 	DLinkNode *tail;

@@ -11,6 +11,7 @@ int main()
 {
 	BankAccount ba;
 	StockAccount sa;
+	sa.set_ba(&ba);
 	int ch;
 	cout << "Welcome to the Account Management System." << endl;
 	while (true)
